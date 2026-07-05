@@ -1,1 +1,144 @@
+# 🛡️ Snort IDS/IPS Setup Guide
 
+## Overview
+
+Snort can operate in two modes using a single config file:
+
+| Mode | Type | Action |
+|------|------|--------|
+| **IDS** (Intrusion Detection System) | Passive | Monitors & alerts only |
+| **IPS** (Intrusion Prevention System) | Inline | Monitors & actively blocks |
+
+---
+
+## Lab Setup
+
+| Component | Details |
+|-----------|---------|
+| Snort Host | Ubuntu |
+| Config File | snort-combined.conf |
+| Targets | Windows 11 + Ubuntu Desktop |
+| Attacker | Kali Linux |
+
+---
+
+## Installation
+
+```bash
+# Update system
+sudo apt-get update
+
+# Install Snort
+sudo apt-get install snort -y
+
+# Install NFQ DAQ (needed for IPS mode)
+sudo apt-get install libdaq2 libdaq-dev -y
+
+# Verify installation
+snort --version
+
+# List available DAQ modules
+snort --daq-list
+```
+
+---
+
+## IDS Mode (Passive)
+
+Snort listens on the network interface in promiscuous mode, inspects packets, and generates alerts — **no blocking**.
+
+```bash
+# Set interface to promiscuous mode
+sudo ip link set eth0 promisc on
+
+# Run in IDS mode (console output for testing)
+sudo snort -A console -i eth0 -c /etc/snort/snort-combined.conf
+
+# Run in IDS mode with logging
+sudo snort -A fast -i eth0 -c /etc/snort/snort-combined.conf -l /var/log/snort
+
+# Validate config
+sudo snort -T -c /etc/snort/snort-combined.conf
+
+# Read from pcap file
+sudo snort -A console -r capture.pcap -c /etc/snort/snort-combined.conf
+```
+
+---
+
+## IPS Mode (Inline)
+
+Snort intercepts packets via iptables NFQ, inspects them, and **drops malicious packets** in real time.
+
+```bash
+# Step 1: Redirect traffic to NFQ
+sudo iptables -I FORWARD -j NFQUEUE --queue-num 0
+sudo iptables -I INPUT -j NFQUEUE --queue-num 0
+sudo iptables -I OUTPUT -j NFQUEUE --queue-num 0
+
+# Step 2: Uncomment DAQ lines in snort-combined.conf:
+# config daq: nfq
+# config daq_mode: inline
+# config daq_var: queue=0
+
+# Step 3: Run Snort in IPS mode
+sudo snort -Q --daq nfq --daq-var queue=0 -c /etc/snort/snort-combined.conf -A fast
+
+# Step 4: Remove iptables rules after testing
+sudo iptables -D FORWARD -j NFQUEUE --queue-num 0
+sudo iptables -D INPUT -j NFQUEUE --queue-num 0
+sudo iptables -D OUTPUT -j NFQUEUE --queue-num 0
+```
+
+---
+
+## IDS vs IPS Rule Actions
+
+| Action | IDS Mode | IPS Mode |
+|--------|----------|----------|
+| `alert` | Generates alert | Generates alert (no block) |
+| `drop` | Not effective | Blocks packet + alert |
+| `reject` | Not effective | Blocks + sends TCP RST |
+| `pass` | Ignores packet | Ignores packet |
+
+---
+
+## Alert Modes
+
+| Mode | Description |
+|------|-------------|
+| `console` | Print alerts to terminal |
+| `fast` | One-line alert to file |
+| `full` | Detailed alert to file |
+| `unified2` | Binary format for external tools |
+
+---
+
+## Viewing Alerts
+
+```bash
+# View alerts in real time
+tail -f /var/log/snort/alert
+
+# View all alerts
+cat /var/log/snort/alert
+```
+
+---
+
+## Config File
+
+📄 [snort-combined.conf](../configs/snort.conf)
+
+---
+
+## Screenshots
+
+> Add your IDS/IPS alert and blocking screenshots here.
+
+---
+
+## References
+
+- [Snort Official Documentation](https://www.snort.org/documents)
+- [NFQ DAQ Documentation](https://github.com/snort3/libdaq)
