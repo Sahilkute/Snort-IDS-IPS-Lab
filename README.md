@@ -3,7 +3,7 @@
 # 🔍 Snort IDS/IPS Home Lab
 
 ![Snort](https://img.shields.io/badge/Snort-IDS%2FIPS-red?style=for-the-badge)
-![Platform](https://img.shields.io/badge/Platform-Windows%2011%20%7C%20Ubuntu-green?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%20Ubuntu-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen?style=for-the-badge)
 ![Blue Team](https://img.shields.io/badge/Team-Blue%20Team-blue?style=for-the-badge)
 
@@ -17,7 +17,7 @@ A hands-on IDS/IPS home lab built with **Snort**, configured in both Intrusion D
 |-----------|------|----|
 | Snort (IDS Mode) | Passive traffic monitoring & alerting | Ubuntu |
 | Snort (IPS Mode) | Inline traffic blocking & prevention | Ubuntu |
-| Target Machine 1 | Monitored Endpoint | Windows 11 |
+| Target Machine 1 | Monitored Endpoint | Windows 10 |
 | Target Machine 2 | Monitored Endpoint | Ubuntu Desktop |
 | Attacker Machine | Attack simulation | Kali Linux |
 
@@ -29,7 +29,7 @@ A hands-on IDS/IPS home lab built with **Snort**, configured in both Intrusion D
 - Configured in passive/listening mode
 - Monitors network traffic without blocking
 - Generates alerts on suspicious activity
-- 📄 [IDS Setup Documentation](docs/ids-setup.md)
+- 📄 [IDS Setup Documentation](docs/setup.txt)
 
 ---
 
@@ -37,7 +37,7 @@ A hands-on IDS/IPS home lab built with **Snort**, configured in both Intrusion D
 - Configured in inline mode
 - Actively blocks malicious traffic in real time
 - Uses iptables/NFQ for packet interception
-- 📄 [IPS Setup Documentation](docs/ips-setup.md)
+- 📄 [IPS Setup Documentation](docs/setup.txt)
 
 ---
 
@@ -45,7 +45,7 @@ A hands-on IDS/IPS home lab built with **Snort**, configured in both Intrusion D
 - Written custom Snort rules for real attack scenarios
 - Tested rules by simulating live attacks on lab machines
 - Rules mapped to common attack techniques
-- 📄 [Rule Writing Documentation](docs/rule-writing.md)
+- 📄 [Rule Writing Documentation](docs/rule-writing.txt)
 
 ---
 
@@ -61,9 +61,8 @@ Snort-IDS-IPS-Lab/
 ├── rules/
 │   └── custom.rules           # Custom detection rules
 └── docs/
-    ├── ids-setup.md           # IDS setup guide
-    ├── ips-setup.md           # IPS setup guide
-    └── rule-writing.md        # Rule writing guide
+    ├── setup.txt           # IDS IPS setup guide
+    └── rule-writing.txt        # Rule writing guide
 ```
 
 ---
@@ -97,7 +96,7 @@ snort --version
 | Snort | IDS/IPS Engine |
 | iptables / NFQ | Packet interception for IPS mode |
 | Kali Linux | Attack simulation |
-| Windows 11 | Target endpoint |
+| Windows 10 | Target endpoint |
 | Ubuntu Desktop | Target endpoint |
 
 ---
@@ -117,6 +116,8 @@ snort --version
 ## 📸 Screenshots
 
 > Screenshots of Snort alerts and rule testing are available in the [`screenshots/`](screenshots/) folder.
+<img width="1920" height="1080" alt="snort ss 1" src="https://github.com/user-attachments/assets/94388957-7b90-4d10-8eb4-b5f96ccb5645" />
+<img width="1907" height="1072" alt="snort ss2" src="https://github.com/user-attachments/assets/a6c5c8cc-4397-44ba-b4de-a35c0241df37" />
 
 ---
 
@@ -131,8 +132,8 @@ snort --version
 ## 👤 Author
 
 **Your Name**
-- 🔗 [LinkedIn](https://linkedin.com/in/yourprofile)
-- 🐙 [GitHub](https://github.com/yourusername)
+- 🔗 [LinkedIn](https://linkedin.com/in/sahil-kute)
+- 🐙 [GitHub](https://github.com/Sahilkute)
 
 ---
 
