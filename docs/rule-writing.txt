@@ -101,7 +101,7 @@ sudo snort -A console -i eth0 -c /etc/snort/snort-ids.conf
 📄 [custom.rules](../rules/custom.rules)
 
 ---
-
+## Refrences
 
 - [Snort Rule Writing Guide](https://docs.snort.org/rules/)
 - [Snort Rule Header Options](https://www.snort.org/documents)
