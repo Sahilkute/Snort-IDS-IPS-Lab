@@ -1,1 +1,108 @@
+# 📝 Snort Rule Writing Guide
 
+## Overview
+
+Snort rules are the heart of detection. Each rule defines what traffic to look for and what action to take when found. This guide covers rule anatomy, options, and the custom rules written and tested in this lab.
+
+---
+
+## Rule Anatomy
+
+```
+action proto src_ip src_port direction dst_ip dst_port (options)
+```
+
+### Example
+```
+alert tcp any any -> $HOME_NET 22 (msg:"SSH Brute Force"; flags:S; threshold:type both, track by_src, count 5, seconds 60; sid:1000020; rev:1;)
+```
+
+---
+
+## Rule Header
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| Action | What to do on match | `alert`, `drop`, `pass`, `reject` |
+| Protocol | Traffic protocol | `tcp`, `udp`, `icmp`, `ip` |
+| Src IP | Source IP address | `any`, `192.168.1.0/24` |
+| Src Port | Source port | `any`, `80`, `!22` |
+| Direction | Traffic direction | `->` (one way), `<>` (bidirectional) |
+| Dst IP | Destination IP | `$HOME_NET`, `any` |
+| Dst Port | Destination port | `any`, `22`, `$HTTP_PORTS` |
+
+---
+
+## Rule Options
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `msg` | Alert message | `msg:"SSH Scan";` |
+| `sid` | Unique rule ID | `sid:1000001;` |
+| `rev` | Rule revision | `rev:1;` |
+| `content` | Match string in payload | `content:"SELECT";` |
+| `nocase` | Case insensitive match | `content:"select"; nocase;` |
+| `flags` | TCP flags | `flags:S;` (SYN) |
+| `itype` | ICMP type | `itype:8;` (echo request) |
+| `threshold` | Rate limiting | `threshold:type both, track by_src, count 5, seconds 60;` |
+| `classtype` | Alert classification | `classtype:attempted-recon;` |
+
+---
+
+## TCP Flags Reference
+
+| Flag | Meaning |
+|------|---------|
+| `S` | SYN |
+| `A` | ACK |
+| `F` | FIN |
+| `R` | RST |
+| `P` | PSH |
+| `U` | URG |
+| `0` | No flags (NULL scan) |
+| `FPU` | FIN+PSH+URG (XMAS scan) |
+
+---
+
+## Custom Rules Written & Tested
+
+| Rule | SID | Attack Simulated | Result |
+|------|-----|-----------------|--------|
+| ICMP Flood Detection | 1000002 | Ping flood | ✅ Detected |
+| Nmap SYN Scan | 1000010 | `nmap -sS` | ✅ Detected |
+| Nmap NULL Scan | 1000011 | `nmap -sN` | ✅ Detected |
+| Nmap FIN Scan | 1000012 | `nmap -sF` | ✅ Detected |
+| Nmap XMAS Scan | 1000013 | `nmap -sX` | ✅ Detected |
+| SSH Brute Force | 1000020 | Hydra SSH attack | ✅ Detected |
+| Reverse Shell | 1000030 | Bash reverse shell | ✅ Detected |
+| SQL Injection | 1000040 | Manual SQLi payload | ✅ Detected |
+| Directory Traversal | 1000060 | `../` payload | ✅ Detected |
+| XSS Attempt | 1000062 | `<script>` payload | ✅ Detected |
+
+---
+
+## Testing Rules
+
+```bash
+# Test a specific rule against a pcap
+sudo snort -A console -r test.pcap -c /etc/snort/snort-ids.conf
+
+# Validate rules syntax
+sudo snort -T -c /etc/snort/snort-ids.conf
+
+# Run and watch alerts live
+sudo snort -A console -i eth0 -c /etc/snort/snort-ids.conf
+```
+
+---
+
+## Rules File
+
+📄 [custom.rules](../rules/custom.rules)
+
+---
+
+
+- [Snort Rule Writing Guide](https://docs.snort.org/rules/)
+- [Snort Rule Header Options](https://www.snort.org/documents)
+- [MITRE ATT&CK Framework](https://attack.mitre.org/)
