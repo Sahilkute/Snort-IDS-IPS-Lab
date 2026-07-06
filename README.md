@@ -129,7 +129,7 @@ snort --version
 
 ---
 
-## 👤 Author
+## 👤 Sahil Kute
 
 **Your Name**
 - 🔗 [LinkedIn](https://linkedin.com/in/sahil-kute)
